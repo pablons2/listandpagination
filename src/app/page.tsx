@@ -1,113 +1,163 @@
-import Image from "next/image";
+'use client'
+import React, { useState } from "react";
+import { Input } from "@/components/forms/Input";
 
 export default function Home() {
+  
+
+  const [searchValue, setSearchValue] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+
+  const handleSearchChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSearchValue(e.target.value);
+    setCurrentPage(1); // Reinicia a página ao realizar uma nova pesquisa
+  };
+
+
+  const dataArray = [{
+    "Nome": "Pablo",
+    "RG": "3359129-6",
+    "CPF": "09541272428",
+    "Apelido":"pabloN"
+  },
+  {
+    "Nome": "Ana",
+    "RG": "1234567-8",
+    "CPF": "98765432100",
+    "Apelido": "ana123"
+  },
+  {
+    "Nome": "Carlos",
+    "RG": "8765432-1",
+    "CPF": "45678901234",
+    "Apelido": "carlosC"
+  },
+  {
+    "Nome": "Zara",
+    "RG": "9999999-9",
+    "CPF": "11111111111",
+    "Apelido": "zaraZ"
+  },
+  {
+    "Nome": "Daniel",
+    "RG": "7654321-0",
+    "CPF": "01234567890",
+    "Apelido": "danielD"
+  },
+  {
+    "Nome": "Eva",
+    "RG": "9876543-2",
+    "CPF": "34567890123",
+    "Apelido": "evaE"
+  },
+  {
+    "Nome": "Fernando",
+    "RG": "2345678-9",
+    "CPF": "56789012345",
+    "Apelido": "fernandoF"
+  },
+  {
+    "Nome": "Gabriela",
+    "RG": "5432198-7",
+    "CPF": "89012345678",
+    "Apelido": "gabrielaG"
+  },
+  {
+    "Nome": "Hugo",
+    "RG": "3219876-5",
+    "CPF": "65432109876",
+    "Apelido": "hugoH"
+  },
+  {
+    "Nome": "Isabel",
+    "RG": "9876543-2",
+    "CPF": "23456789012",
+    "Apelido": "isabelI"
+  },
+  {
+    "Nome": "João",
+    "RG": "4567890-1",
+    "CPF": "78901234567",
+    "Apelido": "joaoJ"
+  },
+]
+
+const filteredData = dataArray.filter((item) => {
+  return Object.values(item).some((value) => {
+    if (typeof value === "string") {
+      return value.toLowerCase().startsWith(searchValue.toLowerCase());
+    }
+    return false;
+  });
+});
+
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+const paginate = (pageNumber: React.SetStateAction<number>) => {
+  setCurrentPage(pageNumber);
+};
+
+const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+
+const tableFilter = dataArray.filter((item) => {
+  return Object.values(item).some((value) => {
+    if (typeof value === "string") {
+      return value.toLowerCase().startsWith(searchValue.toLowerCase());
+    }
+    return false;
+  });
+});
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+    <>
+      <div className="w-screen flex flex-col justify-center">
+        <Input
+          name="busca"
+          type="search"
+          value={searchValue}
+          placeholder="Digite para buscar!"
+          onChange={handleSearchChange} 
         />
+ <table className="mt-5 w-screen">
+          <thead className="w-full">
+            <tr className="w-full flex justify-around  bg-slate-600 ">
+              <th> Nome</th>
+              <th> RG </th>
+              <th> CPF </th>
+              <th> Apelido </th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentItems.map((item, index) => (
+              <tr key={index} className="w-full flex justify-around bg-green-700 p-2 border bottom-1">
+                <td>{item.Nome}</td>
+                <td>{item.RG}</td>
+                <td>{item.CPF}</td>
+                <td>{item.Apelido}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="w-full mt-2 flex justify-center gap-4">
+        <button
+            className="p-2 bg-zinc-500 rounded-lg"
+            onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+          >
+            Voltar
+          </button>
+          <button
+            className="p-2 bg-zinc-600 rounded-lg"
+            onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
+          >
+            Próximo
+          </button>
+        </div>
+
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </>
   );
 }
