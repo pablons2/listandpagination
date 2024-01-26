@@ -1,13 +1,13 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/forms/Input";
 
 export default function Home() {
-  
+
 
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 5;
 
   const handleSearchChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setSearchValue(e.target.value);
@@ -15,7 +15,8 @@ export default function Home() {
   };
 
 
-  const dataArray = [{
+const [dataArray, setDataArray] = useState([
+{
     "Nome": "Pablo",
     "RG": "3359129-6",
     "CPF": "09541272428",
@@ -81,7 +82,8 @@ export default function Home() {
     "CPF": "78901234567",
     "Apelido": "joaoJ"
   },
-]
+
+])
 
 const filteredData = dataArray.filter((item) => {
   return Object.values(item).some((value) => {
@@ -112,9 +114,85 @@ const tableFilter = dataArray.filter((item) => {
   });
 });
 
+
+
+const [formValues, setFormValues] = useState(
+  {
+    "Nome":"",
+    "RG":"",
+    "CPF":"",
+    "Apelido":""
+  }
+)
+
+const onSubmit = (e) => {
+  e.preventDefault();
+  const newData = {
+    "Nome": e.target.elements.Nome.value,
+    "RG": e.target.elements.RG.value,
+    "CPF": e.target.elements.CPF.value,
+    "Apelido": e.target.elements.Apelido.value,
+  };
+  setDataArray([newData, ...dataArray]);
+  console.log(dataArray)
+  // Clear form values
+  setFormValues({
+    "Nome": "",
+    "RG": "",
+    "CPF": "",
+    "Apelido": ""
+  });
+};
+// useEffect(() => {
+//   // Check if the length of dataArray has changed
+//   const hasNewData = dataArray.length !== prevDataArrayLength;
+
+//   // If there is new data, you can perform any actions you need here
+//   if (hasNewData) {
+//     // For now, let's just log a message to the console
+//     console.log("New data added to dataArray. Update the table!");
+//   }
+// }, [dataArray]);
   return (
     <>
       <div className="w-screen flex flex-col justify-center">
+
+        <form onSubmit={onSubmit} >
+      <Input
+          name="Nome"
+          type="text"
+          placeholder="Entre com o nome!"
+          // value={undefined}
+          classe="border mb-2 "
+                  />
+          <Input
+          name="RG"
+          type="text"
+          placeholder="Entre com o RG!"
+          // value={undefined}
+          classe="border mb-2 "
+                  />
+          <Input
+          name="CPF"
+          type="text"
+          placeholder="Entre com o CPF!"
+          // value={undefined}
+          classe="border mb-2 "
+                  />
+          <Input
+          name="Apelido"
+          type="text"
+          placeholder="Entre com o apelido!"
+          // value={undefined}
+          classe="border mb-2 "
+                  />
+          <input 
+          type="submit" 
+          value="Enviar" 
+          className="bg-green-600 ps-5 pe-5 pt-2 pb-2 rounded-lg mt-2 mb-2"
+         
+          />
+       </form>
         <Input
           name="busca"
           type="search"
@@ -122,7 +200,7 @@ const tableFilter = dataArray.filter((item) => {
           placeholder="Digite para buscar!"
           onChange={handleSearchChange} 
         />
- <table className="mt-5 w-screen">
+        <table className="mt-5 w-screen">
           <thead className="w-full">
             <tr className="w-full flex justify-around  bg-slate-600 ">
               <th> Nome</th>
