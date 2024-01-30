@@ -157,7 +157,7 @@ const onSubmit = (e) => {
     <>
       <div className="w-screen flex flex-col justify-center">
 
-        <form onSubmit={onSubmit} >
+        <form onSubmit={onSubmit}  className="flex gap-2 mt-2 items-center justify-center ">
       <Input
           name="Nome"
           type="text"

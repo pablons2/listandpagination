@@ -15,7 +15,7 @@ export const Input = ({ name, type, placeholder, value, onChange, classe }: Inpu
             value={value}
             type={type}
             name={name}
-            className={`${classe} w-full p-10 bg-slate-200 text-black` }
+            className={`${classe} w-15 p-2 bg-slate-200 text-black` }
             placeholder={placeholder}
             onChange={onChange}
         />
